@@ -1,6 +1,6 @@
-import { choiceValuesElement } from "../components/DecisionMaker";
+import { ChoiceValuesElement } from "../interfaces/ChoiceValuesElement";
 
-export default function getRatings(choices: choiceValuesElement[]) {
+export default function getRatings(choices: ChoiceValuesElement[]) {
     const output = [];
     for (const choice of choices) {
       output.push(choice["ratings"]);

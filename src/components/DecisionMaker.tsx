@@ -1,33 +1,16 @@
 import { useReducer } from "react";
+import { Action } from "../interfaces/Action";
+import { AttributeElement } from "../interfaces/AttributeElement";
+import { ChoiceValuesElement } from "../interfaces/ChoiceValuesElement";
+import { DecisionState } from "../interfaces/DecisionState";
 import calculateTotal from "../utils/calculateTotal";
 import getRatings from "../utils/getRatings";
 import getWeights from "../utils/getWeights";
 import ChoiceCard from "./ChoiceCard";
 
 //put in seperate folder, extract out what you can
-export interface attributeElement {
-  attributeName: string | number[];
-  weight: undefined | number;
-}
-export interface choiceValuesElement {
-  choiceName: string | number[]; //change to just string
-  ratings: (number | undefined)[];
-  score: undefined | number;
-}
-interface decisionState {
-  choices: choiceValuesElement[];
-  attributes: attributeElement[];
-  winner: undefined | string;
-}
 
-export interface action {
-  type: string;
-  value: string | number[];
-  index?: number;
-  attributeIndex?: number;
-}
-
-function reducer(state: decisionState, action: action): decisionState {
+function reducer(state: DecisionState, action: Action): DecisionState {
   //is switch preffered to if/else?
   if (action.type === "addChoice") {
     return {
@@ -151,7 +134,7 @@ export default function DecisionMaker() {
     const largestScore = arrayOfScores.sort((a, b) => a - b)[0];
     const indexOfLargestScore = arrayOfScores.indexOf(largestScore);
     const winner = state.choices.filter(
-      (el: choiceValuesElement, i: number) => i === indexOfLargestScore
+      (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
     )[0].choiceName;
 
     dispatch({ type: "addScores", value: arrayOfScores });
@@ -164,7 +147,7 @@ export default function DecisionMaker() {
       <form>
         <fieldset>
           <legend>choices:</legend>
-          {state.choices.map((el: choiceValuesElement, i: number) => (
+          {state.choices.map((el: ChoiceValuesElement, i: number) => (
             <input
               key={i}
               type="text"
@@ -177,7 +160,7 @@ export default function DecisionMaker() {
         </fieldset>
         <fieldset>
           <legend>attributes and relative importance:</legend>
-          {state.attributes.map((el: attributeElement, i: number) => (
+          {state.attributes.map((el: AttributeElement, i: number) => (
             <div key={i}>
               <input
                 type="text"
@@ -217,7 +200,7 @@ export default function DecisionMaker() {
           ))}
         </fieldset>
       </form>
-      {state.choices.map((el: choiceValuesElement, i: number) => (
+      {state.choices.map((el: ChoiceValuesElement, i: number) => (
         <ChoiceCard
           key={i}
           choiceIndex={i}

@@ -1,10 +1,12 @@
-import { action, attributeElement, choiceValuesElement } from "./DecisionMaker";
+import { AttributeElement } from "../interfaces/AttributeElement";
+import { Action } from "../interfaces/Action";
+import { ChoiceValuesElement } from "../interfaces/ChoiceValuesElement";
 
 export default function ChoiceCard(props: {
   choiceIndex: number;
-  attributes: attributeElement[];
-  choice: choiceValuesElement;
-  dispatch: React.Dispatch<action>;
+  attributes: AttributeElement[];
+  choice: ChoiceValuesElement;
+  dispatch: React.Dispatch<Action>;
 }) {
   return (
     <>
