@@ -7,9 +7,12 @@ export interface attributeElement {
   attributeName: string;
   weight: undefined | number;
 }
-
+export interface choiceValuesElement {
+  choiceName: string;
+  ratings: (number | undefined)[];
+}
 interface decisionState {
-  choices: string[];
+  choices: choiceValuesElement[];
   attributes: attributeElement[];
 }
 
@@ -22,7 +25,20 @@ export interface action {
 
 export default function DecisionMaker() {
   const initialState = {
-    choices: ["", "", ""],
+    choices: [
+      {
+        choiceName: "",
+        ratings: [undefined, undefined, undefined],
+      },
+      {
+        choiceName: "",
+        ratings: [undefined, undefined, undefined],
+      },
+      {
+        choiceName: "",
+        ratings: [undefined, undefined, undefined],
+      },
+    ],
     attributes: [
       {
         attributeName: "",
@@ -49,7 +65,7 @@ export default function DecisionMaker() {
       newState = {
         ...state,
         choices: [...state.choices].map((el, i) =>
-          i === action.index ? action.value : el
+          i === action.index ? { ...el, choiceName: action.value } : el
         ),
       };
     } else if (action.type === "addAttribute") {
@@ -79,11 +95,11 @@ export default function DecisionMaker() {
       <form>
         <fieldset>
           <legend>choices:</legend>
-          {state.choices.map((el: string, i: number) => (
+          {state.choices.map((el: choiceValuesElement, i: number) => (
             <input
               key={i}
               type="text"
-              value={el}
+              value={el.choiceName}
               onChange={(e) =>
                 dispatch({ type: "addChoice", value: e.target.value, index: i })
               }
@@ -130,7 +146,7 @@ export default function DecisionMaker() {
           ))}
         </fieldset>
       </form>
-      {state.choices.map((el: string, i: number) => (
+      {state.choices.map((el: choiceValuesElement, i: number) => (
         <ChoiceCard
           key={i}
           choiceIndex={i}
