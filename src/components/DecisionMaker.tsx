@@ -1,8 +1,9 @@
 import { useReducer } from "react";
+import ChoiceCard from "./ChoiceCard";
 
 //make interface for whole state
 //put in seperate folder, extract out what you can
-interface attributeElement {
+export interface attributeElement {
   attributeName: string;
   weight: undefined | number;
 }
@@ -12,10 +13,11 @@ interface decisionState {
   attributes: attributeElement[];
 }
 
-interface action {
+export interface action {
   type: string;
   value: string;
   index: number;
+  attributeIndex?: number;
 }
 
 export default function DecisionMaker() {
@@ -36,6 +38,7 @@ export default function DecisionMaker() {
       },
     ],
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state: decisionState, action: action) {
@@ -127,6 +130,15 @@ export default function DecisionMaker() {
           ))}
         </fieldset>
       </form>
+      {state.choices.map((el: string, i: number) => (
+        <ChoiceCard
+          key={i}
+          choiceIndex={i}
+          attributes={state.attributes}
+          choice={el}
+          dispatch={dispatch}
+        />
+      ))}
       {/* add label to inputs */}
       {/* <input
         placeholder="e.g. brownies"
