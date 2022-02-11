@@ -1,9 +1,17 @@
 import { useReducer } from "react";
 
 //make interface for whole state
+//put in seperate folder, extract out what you can
+interface attributeElement {
+  attributeName: string;
+  weight: undefined | number;
+}
+
 interface decisionState {
   choices: string[];
+  attributes: attributeElement[];
 }
+
 interface action {
   type: string;
   value: string;
@@ -13,11 +21,26 @@ interface action {
 export default function DecisionMaker() {
   const initialState = {
     choices: ["", "", ""],
+    attributes: [
+      {
+        attributeName: "",
+        weight: undefined,
+      },
+      {
+        attributeName: "",
+        weight: undefined,
+      },
+      {
+        attributeName: "",
+        weight: undefined,
+      },
+    ],
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state: decisionState, action: action) {
     let newState;
+    //is switch preffered to if/else?
     if (action.type === "addChoice") {
       //   newState = { ...state, choices: [...state.choices, action.value] };
       newState = {
@@ -26,25 +49,67 @@ export default function DecisionMaker() {
           i === action.index ? action.value : el
         ),
       };
-      return newState;
     } else {
       throw new Error();
     }
+    return newState;
   }
   //placeholders: brownies, pizza, sandwhich
   console.log(state);
   return (
     <>
-      <p>choices:</p>
-      {state.choices.map((el, i) => (
-        <input
-          key={i}
-          value={el}
-          onChange={(e) =>
-            dispatch({ type: "addChoice", value: e.target.value, index: i })
-          }
-        ></input>
-      ))}
+      <form>
+        <fieldset>
+          <legend>choices:</legend>
+          {state.choices.map((el: string, i: number) => (
+            <input
+              key={i}
+              type="text"
+              value={el}
+              onChange={(e) =>
+                dispatch({ type: "addChoice", value: e.target.value, index: i })
+              }
+            ></input>
+          ))}
+        </fieldset>
+        <fieldset>
+          <legend>attributes and relative importance:</legend>
+          {state.attributes.map((el: attributeElement, i: number) => (
+            <div key={i}>
+              <input
+                type="text"
+                value={el.attributeName}
+                onChange={(e) =>
+                  dispatch({
+                    type: "addAttribute",
+                    value: e.target.value,
+                    index: i,
+                  })
+                }
+              ></input>
+              {":"}
+              <select
+                name="weights"
+                id="weights"
+                onChange={(e) =>
+                  dispatch({
+                    type: "addWeight",
+                    value: e.target.value,
+                    index: i,
+                  })
+                }
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          ))}
+        </fieldset>
+      </form>
+      {/* add label to inputs */}
       {/* <input
         placeholder="e.g. brownies"
         value=""
