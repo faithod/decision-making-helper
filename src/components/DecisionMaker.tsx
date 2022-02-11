@@ -1,7 +1,6 @@
 import { useReducer } from "react";
 import ChoiceCard from "./ChoiceCard";
 
-//make interface for whole state
 //put in seperate folder, extract out what you can
 export interface attributeElement {
   attributeName: string;
@@ -61,7 +60,6 @@ export default function DecisionMaker() {
     let newState;
     //is switch preffered to if/else?
     if (action.type === "addChoice") {
-      //   newState = { ...state, choices: [...state.choices, action.value] };
       newState = {
         ...state,
         choices: [...state.choices].map((el, i) =>
@@ -170,22 +168,6 @@ export default function DecisionMaker() {
           dispatch={dispatch}
         />
       ))}
-      {/* add label to inputs */}
-      {/* <input
-        placeholder="e.g. brownies"
-        value=""
-        onChange={(e) => dispatch({ type: "addChoice", value: e.target.value })}
-      ></input>
-      <input
-        placeholder="e.g. pizza"
-        value=""
-        onChange={(e) => dispatch({ type: "addChoice", value: e.target.value })}
-      ></input>
-      <input
-        placeholder="e.g. sandwhich"
-        value=""
-        onChange={(e) => dispatch({ type: "addChoice", value: e.target.value })}
-      ></input> */}
     </>
   );
 }
