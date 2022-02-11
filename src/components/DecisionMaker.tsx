@@ -49,6 +49,21 @@ export default function DecisionMaker() {
           i === action.index ? action.value : el
         ),
       };
+    } else if (action.type === "addAttribute") {
+      newState = {
+        ...state,
+        attributes: [...state.attributes].map((el, i) =>
+          i === action.index ? { ...el, attributeName: action.value } : el
+        ),
+      };
+    } else if (action.type === "addWeight") {
+      const chosenWeight = parseInt(action.value);
+      newState = {
+        ...state,
+        attributes: [...state.attributes].map((el, i) =>
+          i === action.index ? { ...el, weight: chosenWeight } : el
+        ),
+      };
     } else {
       throw new Error();
     }
