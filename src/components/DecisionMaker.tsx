@@ -83,6 +83,21 @@ export default function DecisionMaker() {
           i === action.index ? { ...el, weight: chosenWeight } : el
         ),
       };
+    } else if (action.type === "addRating") {
+      newState = {
+        ...state,
+        choices: [...state.choices].map((el, i) => {
+          if (i === action.index) {
+            const chosenRating = parseInt(action.value);
+            const ratings = el.ratings.map((rating, i) =>
+              i === action.attributeIndex ? chosenRating : rating
+            );
+            return { ...el, ratings: ratings };
+          } else {
+            return el;
+          }
+        }),
+      };
     } else {
       throw new Error();
     }
