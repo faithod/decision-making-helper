@@ -1,4 +1,4 @@
 export interface AttributeElement {
-    attributeName: string | number[];
-    weight: undefined | number;
-  }
+  attributeName: string | number[];
+  weight: undefined | number;
+}
