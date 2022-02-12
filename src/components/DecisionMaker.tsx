@@ -155,7 +155,9 @@ export default function DecisionMaker() {
       return output;
     }
     const arrayOfScores = calculateScores();
-    const largestScore = arrayOfScores.sort((a, b) => a - b)[0];
+    console.log(arrayOfScores);
+    const largestScore = [...arrayOfScores].sort((a, b) => b - a)[0];
+    console.log(largestScore);
     const indexOfLargestScore = arrayOfScores.indexOf(largestScore);
     const winner = state.choices.filter(
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
