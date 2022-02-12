@@ -91,11 +91,25 @@ function reducer(state: DecisionState, action: Action): DecisionState {
         attributeName: "",
         weight: undefined,
       };
-      return { ...state, attributes: [...state.attributes, attributeElement] };
+      return {
+        ...state,
+        attributes: [...state.attributes, attributeElement],
+        choices: [...state.choices].map((el) => {
+          //ratings array should increase and decrease with the number of attributes
+          return { ...el, ratings: [...el.ratings, undefined] };
+        }),
+      };
     case "deleteChoice":
       return { ...state, choices: [...state.choices].slice(0, -1) };
     case "deleteAttribute":
-      return { ...state, attributes: [...state.attributes].slice(0, -1) };
+      return {
+        ...state,
+        attributes: [...state.attributes].slice(0, -1),
+        choices: [...state.choices].map((el) => {
+          //ratings array should increase and decrease with the number of attributes
+          return { ...el, ratings: [...el.ratings].slice(0, -1) };
+        }),
+      };
     default:
       return state;
   }
@@ -155,9 +169,7 @@ export default function DecisionMaker() {
       return output;
     }
     const arrayOfScores = calculateScores();
-    console.log(arrayOfScores);
     const largestScore = [...arrayOfScores].sort((a, b) => b - a)[0];
-    console.log(largestScore);
     const indexOfLargestScore = arrayOfScores.indexOf(largestScore);
     const winner = state.choices.filter(
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
