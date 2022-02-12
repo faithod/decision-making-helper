@@ -1,6 +1,6 @@
 export interface Action {
   type: string;
-  value: string | number[];
+  value?: string | number[];
   index?: number;
   attributeIndex?: number;
 }

@@ -19,7 +19,7 @@ export default function ChoiceCard(props: {
             id="attribute-scores"
             onChange={(e) =>
               props.dispatch({
-                type: "addRating",
+                type: "insertRating",
                 value: e.target.value,
                 index: props.choiceIndex,
                 attributeIndex: i,
@@ -37,7 +37,7 @@ export default function ChoiceCard(props: {
           </select>
         </div>
       ))}
-      <p>Score:</p>
+      <p>Score: {props.choice.score}</p>
     </>
   );
 }
