@@ -37,7 +37,7 @@ export default function ChoiceCard(props: {
           </select>
         </div>
       ))}
-      <p>Score:</p>
+      <p>Score: {props.choice.score}</p>
     </>
   );
 }

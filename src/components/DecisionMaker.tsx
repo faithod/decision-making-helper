@@ -8,8 +8,6 @@ import getRatings from "../utils/getRatings";
 import getWeights from "../utils/getWeights";
 import ChoiceCard from "./ChoiceCard";
 
-//extract out what you can
-
 function reducer(state: DecisionState, action: Action): DecisionState {
   let chosenWeight: number;
   switch (action.type) {
@@ -73,23 +71,14 @@ function reducer(state: DecisionState, action: Action): DecisionState {
           return { ...el, score: scoreToAdd };
         }),
       };
+    case "addWinner":
+      return {
+        ...state,
+        winner: typeof action.value === "string" ? action.value : "",
+      };
     default:
       return state;
   }
-  //   if (action.type === "addChoice") {
-
-  //   } else if (action.type === "addAttribute") {
-
-  //   } else if (action.type === "addWeight") {
-
-  //   } else if (action.type === "addRating") {
-
-  //   } else if (action.type === "addScores") {
-
-  //   } else {
-  //     // throw new Error("Unknown action type: " + action.type);
-  //     return state;
-  //   }
 }
 
 export default function DecisionMaker() {
@@ -140,7 +129,6 @@ export default function DecisionMaker() {
       for (const rating of arrOfRatings) {
         if (weights) {
           const total = calculateTotal(weights, rating);
-          console.log(total);
           output.push(total);
         }
       }
@@ -152,10 +140,11 @@ export default function DecisionMaker() {
     const winner = state.choices.filter(
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
     )[0].choiceName;
-    console.log(winner);
+
     dispatch({ type: "addScores", value: arrayOfScores });
+    dispatch({ type: "addWinner", value: winner });
   }
-  //   console.log(handleFindTheWinner());
+
   //placeholders: brownies, pizza, sandwhich
   console.log(state);
   return (
@@ -226,7 +215,7 @@ export default function DecisionMaker() {
         />
       ))}
       <button onClick={handleFindTheWinner}>Find the Winner</button>
-      <p>Winner:</p>
+      <p>Winner: {state.winner}</p>
     </>
   );
 }
