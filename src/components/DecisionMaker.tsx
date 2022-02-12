@@ -8,72 +8,88 @@ import getRatings from "../utils/getRatings";
 import getWeights from "../utils/getWeights";
 import ChoiceCard from "./ChoiceCard";
 
-//put in seperate folder, extract out what you can
+//extract out what you can
 
 function reducer(state: DecisionState, action: Action): DecisionState {
-  //is switch preffered to if/else?
-  if (action.type === "addChoice") {
-    return {
-      ...state,
-      choices: [...state.choices].map((el, i) =>
-        i === action.index ? { ...el, choiceName: action.value } : el
-      ),
-    };
-  } else if (action.type === "addAttribute") {
-    return {
-      ...state,
-      attributes: [...state.attributes].map((el, i) =>
-        i === action.index ? { ...el, attributeName: action.value } : el
-      ),
-    };
-  } else if (action.type === "addWeight") {
-    const chosenWeight = parseInt(
-      typeof action.value === "string" ? action.value : ""
-    );
-    return {
-      ...state,
-      attributes: [...state.attributes].map((el, i) =>
-        i === action.index ? { ...el, weight: chosenWeight } : el
-      ),
-    };
-  } else if (action.type === "addRating") {
-    return {
-      ...state,
-      choices: [...state.choices].map((el, i) => {
-        if (i === action.index) {
-          const chosenRating = parseInt(
-            typeof action.value === "string" ? action.value : ""
-          );
-          const ratings = el.ratings.map((rating, i) =>
-            i === action.attributeIndex ? chosenRating : rating
-          );
-          return { ...el, ratings: ratings };
-        } else {
-          return el;
-        }
-      }),
-    };
-  } else if (action.type === "addScores") {
-    return {
-      ...state,
-      choices: [...state.choices].map((el, i) => {
-        let scoreToAdd;
-        for (const score of action.value) {
-          let indexOfScore: number;
-          if (typeof action.value !== "string" && typeof score === "number") {
-            indexOfScore = action.value.indexOf(score);
-            if (i === indexOfScore) {
-              scoreToAdd = score;
+  let chosenWeight: number;
+  switch (action.type) {
+    case "addChoice":
+      return {
+        ...state,
+        choices: [...state.choices].map((el, i) =>
+          i === action.index ? { ...el, choiceName: action.value } : el
+        ),
+      };
+    case "addAttribute":
+      return {
+        ...state,
+        attributes: [...state.attributes].map((el, i) =>
+          i === action.index ? { ...el, attributeName: action.value } : el
+        ),
+      };
+    case "addWeight":
+      chosenWeight = parseInt(
+        typeof action.value === "string" ? action.value : ""
+      );
+      return {
+        ...state,
+        attributes: [...state.attributes].map((el, i) =>
+          i === action.index ? { ...el, weight: chosenWeight } : el
+        ),
+      };
+    case "addRating":
+      return {
+        ...state,
+        choices: [...state.choices].map((el, i) => {
+          if (i === action.index) {
+            const chosenRating = parseInt(
+              typeof action.value === "string" ? action.value : ""
+            );
+            const ratings = el.ratings.map((rating, i) =>
+              i === action.attributeIndex ? chosenRating : rating
+            );
+            return { ...el, ratings: ratings };
+          } else {
+            return el;
+          }
+        }),
+      };
+    case "addScores":
+      return {
+        ...state,
+        choices: [...state.choices].map((el, i) => {
+          let scoreToAdd;
+          for (const score of action.value) {
+            let indexOfScore: number;
+            if (typeof action.value !== "string" && typeof score === "number") {
+              indexOfScore = action.value.indexOf(score);
+              if (i === indexOfScore) {
+                scoreToAdd = score;
+                console.log(score);
+              }
             }
           }
-        }
-        return { ...el, score: scoreToAdd };
-      }),
-    };
-  } else {
-    // throw new Error("Unknown action type: " + action.type);
-    return state;
+          console.log(scoreToAdd);
+          return { ...el, score: scoreToAdd };
+        }),
+      };
+    default:
+      return state;
   }
+  //   if (action.type === "addChoice") {
+
+  //   } else if (action.type === "addAttribute") {
+
+  //   } else if (action.type === "addWeight") {
+
+  //   } else if (action.type === "addRating") {
+
+  //   } else if (action.type === "addScores") {
+
+  //   } else {
+  //     // throw new Error("Unknown action type: " + action.type);
+  //     return state;
+  //   }
 }
 
 export default function DecisionMaker() {
