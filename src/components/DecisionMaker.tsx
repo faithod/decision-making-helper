@@ -152,7 +152,7 @@ export default function DecisionMaker() {
     const winner = state.choices.filter(
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
     )[0].choiceName;
-
+    console.log(winner);
     dispatch({ type: "addScores", value: arrayOfScores });
   }
   //   console.log(handleFindTheWinner());
