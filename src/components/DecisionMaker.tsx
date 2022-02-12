@@ -7,25 +7,28 @@ import calculateTotal from "../utils/calculateTotal";
 import getRatings from "../utils/getRatings";
 import getWeights from "../utils/getWeights";
 import ChoiceCard from "./ChoiceCard";
+import DeleteAndAddButtons from "./DeleteAndAddButtons";
 
 function reducer(state: DecisionState, action: Action): DecisionState {
   let chosenWeight: number;
+  let choiceElement: ChoiceValuesElement;
+  let attributeElement: AttributeElement;
   switch (action.type) {
-    case "addChoice":
+    case "insertChoice":
       return {
         ...state,
         choices: [...state.choices].map((el, i) =>
           i === action.index ? { ...el, choiceName: action.value } : el
         ),
       };
-    case "addAttribute":
+    case "insertAttribute":
       return {
         ...state,
         attributes: [...state.attributes].map((el, i) =>
           i === action.index ? { ...el, attributeName: action.value } : el
         ),
       };
-    case "addWeight":
+    case "insertWeight":
       chosenWeight = parseInt(
         typeof action.value === "string" ? action.value : ""
       );
@@ -35,7 +38,7 @@ function reducer(state: DecisionState, action: Action): DecisionState {
           i === action.index ? { ...el, weight: chosenWeight } : el
         ),
       };
-    case "addRating":
+    case "insertRating":
       return {
         ...state,
         choices: [...state.choices].map((el, i) => {
@@ -52,18 +55,16 @@ function reducer(state: DecisionState, action: Action): DecisionState {
           }
         }),
       };
-    case "addScores":
+    case "insertScores":
       return {
         ...state,
         choices: [...state.choices].map((el, i) => {
           let scoreToAdd;
-          for (const score of action.value) {
-            let indexOfScore: number;
-            if (typeof action.value !== "string" && typeof score === "number") {
-              indexOfScore = action.value.indexOf(score);
+          if (typeof action.value === "object") {
+            for (const score of action.value) {
+              const indexOfScore = action.value.indexOf(score);
               if (i === indexOfScore) {
                 scoreToAdd = score;
-                console.log(score);
               }
             }
           }
@@ -71,11 +72,30 @@ function reducer(state: DecisionState, action: Action): DecisionState {
           return { ...el, score: scoreToAdd };
         }),
       };
-    case "addWinner":
+    case "insertWinner":
       return {
         ...state,
         winner: typeof action.value === "string" ? action.value : "",
       };
+    case "addChoice":
+      //element to add to choice state
+      choiceElement = {
+        choiceName: "",
+        ratings: [undefined, undefined, undefined],
+        score: undefined,
+      };
+      return { ...state, choices: [...state.choices, choiceElement] };
+    case "addAttribute":
+      //element to add to attribute state
+      attributeElement = {
+        attributeName: "",
+        weight: undefined,
+      };
+      return { ...state, attributes: [...state.attributes, attributeElement] };
+    case "deleteChoice":
+      return { ...state, choices: [...state.choices].slice(0, -1) };
+    case "deleteAttribute":
+      return { ...state, attributes: [...state.attributes].slice(0, -1) };
     default:
       return state;
   }
@@ -141,8 +161,8 @@ export default function DecisionMaker() {
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
     )[0].choiceName;
 
-    dispatch({ type: "addScores", value: arrayOfScores });
-    dispatch({ type: "addWinner", value: winner });
+    dispatch({ type: "insertScores", value: arrayOfScores });
+    dispatch({ type: "insertWinner", value: winner });
   }
 
   //placeholders: brownies, pizza, sandwhich
@@ -158,10 +178,15 @@ export default function DecisionMaker() {
               type="text"
               value={typeof el.choiceName === "string" ? el.choiceName : ""}
               onChange={(e) =>
-                dispatch({ type: "addChoice", value: e.target.value, index: i })
+                dispatch({
+                  type: "insertChoice",
+                  value: e.target.value,
+                  index: i,
+                })
               }
             ></input>
           ))}
+          <DeleteAndAddButtons type={"Choice"} dispatch={dispatch} />
         </fieldset>
         <fieldset>
           <legend>attributes and relative importance:</legend>
@@ -174,7 +199,7 @@ export default function DecisionMaker() {
                 }
                 onChange={(e) =>
                   dispatch({
-                    type: "addAttribute",
+                    type: "insertAttribute",
                     value: e.target.value,
                     index: i,
                   })
@@ -186,7 +211,7 @@ export default function DecisionMaker() {
                 id="weights"
                 onChange={(e) =>
                   dispatch({
-                    type: "addWeight",
+                    type: "insertWeight",
                     value: e.target.value,
                     index: i,
                   })
@@ -203,6 +228,7 @@ export default function DecisionMaker() {
               </select>
             </div>
           ))}
+          <DeleteAndAddButtons type={"Attribute"} dispatch={dispatch} />
         </fieldset>
       </form>
       {state.choices.map((el: ChoiceValuesElement, i: number) => (
