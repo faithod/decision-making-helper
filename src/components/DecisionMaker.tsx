@@ -10,6 +10,10 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Choices from "./Choices";
 import { Item } from "../Item";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 
 function reducer(state: DecisionState, action: Action): DecisionState {
   let chosenWeight: number;
@@ -62,7 +66,7 @@ function reducer(state: DecisionState, action: Action): DecisionState {
         ...state,
         choices: [...state.choices].map((el, i) => {
           let scoreToAdd;
-          if (typeof action.value === "object") {
+          if (Array.isArray(action.value)) {
             for (const score of action.value) {
               const indexOfScore = action.value.indexOf(score);
               if (i === indexOfScore) {
@@ -195,7 +199,9 @@ export default function DecisionMaker() {
                     <legend>attributes and relative importance:</legend>
                     {state.attributes.map((el: AttributeElement, i: number) => (
                       <div key={i}>
-                        <input
+                        <TextField
+                          size="small"
+                          sx={{ m: 1 }}
                           type="text"
                           value={
                             typeof el.attributeName === "string"
@@ -209,26 +215,29 @@ export default function DecisionMaker() {
                               index: i,
                             })
                           }
-                        ></input>
-                        {":"}
-                        <select
-                          name="weights"
-                          id="weights"
-                          onChange={(e) =>
-                            dispatch({
-                              type: "insertWeight",
-                              value: e.target.value,
-                              index: i,
-                            })
-                          }
-                        >
-                          <option value="">select one</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
+                        ></TextField>
+                        <FormControl>
+                          <Select
+                            size="small"
+                            sx={{ mt: 1 }}
+                            name="weights"
+                            id="weights"
+                            onChange={(e) =>
+                              dispatch({
+                                type: "insertWeight",
+                                value: e.target.value,
+                                index: i,
+                              })
+                            }
+                          >
+                            <MenuItem value="">select one</MenuItem>
+                            <MenuItem value="1">1</MenuItem>
+                            <MenuItem value="2">2</MenuItem>
+                            <MenuItem value="3">3</MenuItem>
+                            <MenuItem value="4">4</MenuItem>
+                            <MenuItem value="5">5</MenuItem>
+                          </Select>
+                        </FormControl>
                       </div>
                     ))}
                     <DeleteAndAddButtons
@@ -241,15 +250,18 @@ export default function DecisionMaker() {
             </Grid>
             <Grid item xs={12}>
               <Item sx={{ bgcolor: "#f3e5f5" }}>
-                {state.choices.map((el: ChoiceValuesElement, i: number) => (
-                  <ChoiceCard
-                    key={i}
-                    choiceIndex={i}
-                    attributes={state.attributes}
-                    choice={el}
-                    dispatch={dispatch}
-                  />
-                ))}
+                <Box sx={{ display: "flex" }}>
+                  {state.choices.map((el: ChoiceValuesElement, i: number) => (
+                    <ChoiceCard
+                      key={i}
+                      choiceIndex={i}
+                      attributes={state.attributes}
+                      choice={el}
+                      dispatch={dispatch}
+                      Item={Item}
+                    />
+                  ))}
+                </Box>
                 <button onClick={handleFindTheWinner}>Find the Winner</button>
               </Item>
             </Grid>
