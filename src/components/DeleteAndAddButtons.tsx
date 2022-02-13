@@ -1,4 +1,7 @@
+import { IconButton } from "@mui/material";
 import { Action } from "../interfaces/Action";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 
 export default function DeleteAndAddButtons(props: {
   type: string;
@@ -6,22 +9,24 @@ export default function DeleteAndAddButtons(props: {
 }) {
   return (
     <>
-      <button
+      <IconButton
+        sx={{ color: "#ab003c" }}
         onClick={(e) => {
           e.preventDefault();
           props.dispatch({ type: "delete" + props.type });
         }}
       >
-        Delete
-      </button>
-      <button
+        <RemoveCircleOutlineIcon />
+      </IconButton>
+      <IconButton
+        sx={{ color: "#ab003c" }}
         onClick={(e) => {
           e.preventDefault();
           props.dispatch({ type: "add" + props.type });
         }}
       >
-        Add
-      </button>
+        <AddCircleOutlineRoundedIcon />
+      </IconButton>
     </>
   );
 }
