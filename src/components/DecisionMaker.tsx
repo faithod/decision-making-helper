@@ -200,7 +200,7 @@ export default function DecisionMaker() {
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            <Choices choices={state.choices} dispatch={dispatch} Item={Item} />
+            <Choices choices={state.choices} dispatch={dispatch} />
             <Grid item xs={12}>
               <Item sx={{ bgcolor: "#fce9ef" }}>
                 <form>
@@ -267,11 +267,16 @@ export default function DecisionMaker() {
                       attributes={state.attributes}
                       choice={el}
                       dispatch={dispatch}
-                      Item={Item}
                     />
                   ))}
                 </Box>
-                <button onClick={handleFindTheWinner}>Find the Winner</button>
+                <Button
+                  variant="outlined"
+                  sx={{ color: "default" }}
+                  onClick={handleFindTheWinner}
+                >
+                  Find the Winner
+                </Button>
               </Item>
             </Grid>
             <Grid item xs={12}>

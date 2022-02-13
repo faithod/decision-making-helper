@@ -4,28 +4,19 @@ import { ChoiceValuesElement } from "../interfaces/ChoiceValuesElement";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Box from "@mui/material/Box";
-import { StyledComponent } from "@emotion/styled";
-import { PaperClasses, SxProps } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { Item } from "../Item";
 
 export default function ChoiceCard(props: {
   choiceIndex: number;
   attributes: AttributeElement[];
   choice: ChoiceValuesElement;
   dispatch: React.Dispatch<Action>;
-  Item: StyledComponent<{
-    children?: React.ReactNode;
-    classes?: Partial<PaperClasses> | undefined;
-    elevation?: number | undefined;
-    square?: boolean | undefined;
-    sx?: SxProps<any> | undefined;
-  }>;
 }) {
   return (
     <>
       <Grid item xs={4}>
-        <props.Item sx={{ bgcolor: "#fce9ef", m: 1 }}>
+        <Item sx={{ bgcolor: "#fce9ef", m: 1 }}>
           <h3>
             {typeof props.choice.choiceName === "string"
               ? props.choice.choiceName
@@ -62,7 +53,7 @@ export default function ChoiceCard(props: {
             </div>
           ))}
           <p>Score: {props.choice.score}</p>
-        </props.Item>
+        </Item>
       </Grid>
     </>
   );
