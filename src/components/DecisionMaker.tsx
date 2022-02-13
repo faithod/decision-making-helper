@@ -202,7 +202,7 @@ export default function DecisionMaker() {
           >
             <Choices choices={state.choices} dispatch={dispatch} />
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#fce9ef" }}>
+              <Item sx={{ bgcolor: "#ede7f6" }}>
                 <form>
                   <fieldset>
                     <legend>attributes and relative importance:</legend>
@@ -258,8 +258,8 @@ export default function DecisionMaker() {
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#fce9ef" }}>
-                <Box sx={{ display: "flex" }}>
+              <Item sx={{ bgcolor: "#fafafa" }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap" }}>
                   {state.choices.map((el: ChoiceValuesElement, i: number) => (
                     <ChoiceCard
                       key={i}
@@ -280,7 +280,7 @@ export default function DecisionMaker() {
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#fce9ef" }}>
+              <Item sx={{ bgcolor: "#ede7f6" }}>
                 <p>Winner: {state.winner}</p>
               </Item>
             </Grid>

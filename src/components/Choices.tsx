@@ -11,7 +11,7 @@ export default function Choices(props: {
 }) {
   return (
     <Grid item xs={12}>
-      <Item sx={{ bgcolor: "#fce9ef" }}>
+      <Item sx={{ bgcolor: "#ede7f6" }}>
         <form>
           <fieldset>
             <legend>choices:</legend>
