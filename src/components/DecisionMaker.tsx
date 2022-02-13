@@ -6,6 +6,10 @@ import { DecisionState } from "../interfaces/DecisionState";
 import calculateScores from "../utils/calculateScores";
 import ChoiceCard from "./ChoiceCard";
 import DeleteAndAddButtons from "./DeleteAndAddButtons";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Choices from "./Choices";
+import { Item } from "../Item";
 
 function reducer(state: DecisionState, action: Action): DecisionState {
   let chosenWeight: number;
@@ -167,77 +171,96 @@ export default function DecisionMaker() {
   console.log(state);
   return (
     <>
-      <form>
-        <fieldset>
-          <legend>choices:</legend>
-          {state.choices.map((el: ChoiceValuesElement, i: number) => (
-            <input
-              key={i}
-              type="text"
-              value={typeof el.choiceName === "string" ? el.choiceName : ""}
-              onChange={(e) =>
-                dispatch({
-                  type: "insertChoice",
-                  value: e.target.value,
-                  index: i,
-                })
-              }
-            ></input>
-          ))}
-          <DeleteAndAddButtons type={"Choice"} dispatch={dispatch} />
-        </fieldset>
-        <fieldset>
-          <legend>attributes and relative importance:</legend>
-          {state.attributes.map((el: AttributeElement, i: number) => (
-            <div key={i}>
-              <input
-                type="text"
-                value={
-                  typeof el.attributeName === "string" ? el.attributeName : ""
-                }
-                onChange={(e) =>
-                  dispatch({
-                    type: "insertAttribute",
-                    value: e.target.value,
-                    index: i,
-                  })
-                }
-              ></input>
-              {":"}
-              <select
-                name="weights"
-                id="weights"
-                onChange={(e) =>
-                  dispatch({
-                    type: "insertWeight",
-                    value: e.target.value,
-                    index: i,
-                  })
-                }
-              >
-                <option value="">select one</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-          ))}
-          <DeleteAndAddButtons type={"Attribute"} dispatch={dispatch} />
-        </fieldset>
-      </form>
-      {state.choices.map((el: ChoiceValuesElement, i: number) => (
-        <ChoiceCard
-          key={i}
-          choiceIndex={i}
-          attributes={state.attributes}
-          choice={el}
-          dispatch={dispatch}
-        />
-      ))}
-      <button onClick={handleFindTheWinner}>Find the Winner</button>
-      <p>Winner: {state.winner}</p>
+      <div style={{ width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            p: 1,
+            m: 4,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+          }}
+        >
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Choices choices={state.choices} dispatch={dispatch} Item={Item} />
+            <Grid item xs={12}>
+              <Item sx={{ bgcolor: "#f3e5f5" }}>
+                <form>
+                  <fieldset>
+                    <legend>attributes and relative importance:</legend>
+                    {state.attributes.map((el: AttributeElement, i: number) => (
+                      <div key={i}>
+                        <input
+                          type="text"
+                          value={
+                            typeof el.attributeName === "string"
+                              ? el.attributeName
+                              : ""
+                          }
+                          onChange={(e) =>
+                            dispatch({
+                              type: "insertAttribute",
+                              value: e.target.value,
+                              index: i,
+                            })
+                          }
+                        ></input>
+                        {":"}
+                        <select
+                          name="weights"
+                          id="weights"
+                          onChange={(e) =>
+                            dispatch({
+                              type: "insertWeight",
+                              value: e.target.value,
+                              index: i,
+                            })
+                          }
+                        >
+                          <option value="">select one</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    ))}
+                    <DeleteAndAddButtons
+                      type={"Attribute"}
+                      dispatch={dispatch}
+                    />
+                  </fieldset>
+                </form>
+              </Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item sx={{ bgcolor: "#f3e5f5" }}>
+                {state.choices.map((el: ChoiceValuesElement, i: number) => (
+                  <ChoiceCard
+                    key={i}
+                    choiceIndex={i}
+                    attributes={state.attributes}
+                    choice={el}
+                    dispatch={dispatch}
+                  />
+                ))}
+                <button onClick={handleFindTheWinner}>Find the Winner</button>
+              </Item>
+            </Grid>
+            <Grid item xs={12}>
+              <Item sx={{ bgcolor: "#f3e5f5" }}>
+                <p>Winner: {state.winner}</p>
+              </Item>
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
     </>
   );
 }
