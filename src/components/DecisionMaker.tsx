@@ -3,9 +3,7 @@ import { Action } from "../interfaces/Action";
 import { AttributeElement } from "../interfaces/AttributeElement";
 import { ChoiceValuesElement } from "../interfaces/ChoiceValuesElement";
 import { DecisionState } from "../interfaces/DecisionState";
-import calculateTotal from "../utils/calculateTotal";
-import getRatings from "../utils/getRatings";
-import getWeights from "../utils/getWeights";
+import calculateScores from "../utils/calculateScores";
 import ChoiceCard from "./ChoiceCard";
 import DeleteAndAddButtons from "./DeleteAndAddButtons";
 
@@ -154,21 +152,7 @@ export default function DecisionMaker() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function handleFindTheWinner() {
-    function calculateScores() {
-      const output = [];
-      const weights = getWeights(state.attributes);
-      console.log(weights);
-      const arrOfRatings = getRatings(state.choices);
-      console.log(arrOfRatings);
-      for (const rating of arrOfRatings) {
-        if (weights) {
-          const total = calculateTotal(weights, rating);
-          output.push(total);
-        }
-      }
-      return output;
-    }
-    const arrayOfScores = calculateScores();
+    const arrayOfScores = calculateScores(state.attributes, state.choices);
     const largestScore = [...arrayOfScores].sort((a, b) => b - a)[0];
     const indexOfLargestScore = arrayOfScores.indexOf(largestScore);
     const winner = state.choices.filter(
@@ -231,9 +215,7 @@ export default function DecisionMaker() {
                   })
                 }
               >
-                <option selected disabled>
-                  select one
-                </option>
+                <option value="">select one</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
