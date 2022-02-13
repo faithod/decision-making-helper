@@ -1,5 +1,5 @@
 export interface ChoiceValuesElement {
-  choiceName: string | number[] | undefined; //remove number[]
+  choiceName: string | number[] | undefined | unknown;
   ratings: (number | undefined)[];
   score: undefined | number;
 }
