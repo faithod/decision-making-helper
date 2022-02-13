@@ -10,7 +10,7 @@ export default function DeleteAndAddButtons(props: {
   return (
     <>
       <IconButton
-        sx={{ color: "#ab003c" }}
+        sx={{ color: "#212121" }}
         onClick={(e) => {
           e.preventDefault();
           props.dispatch({ type: "delete" + props.type });
@@ -19,7 +19,7 @@ export default function DeleteAndAddButtons(props: {
         <RemoveCircleOutlineIcon />
       </IconButton>
       <IconButton
-        sx={{ color: "#ab003c" }}
+        sx={{ color: "#212121" }}
         onClick={(e) => {
           e.preventDefault();
           props.dispatch({ type: "add" + props.type });

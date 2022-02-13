@@ -25,7 +25,7 @@ export default function ChoiceCard(props: {
   return (
     <>
       <Grid item xs={4}>
-        <props.Item sx={{ bgcolor: "#f3e5f5", m: 1 }}>
+        <props.Item sx={{ bgcolor: "#fce9ef", m: 1 }}>
           <h3>
             {typeof props.choice.choiceName === "string"
               ? props.choice.choiceName

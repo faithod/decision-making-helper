@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import { Button } from "@mui/material";
 
 function reducer(state: DecisionState, action: Action): DecisionState {
   let chosenWeight: number;
@@ -65,16 +66,22 @@ function reducer(state: DecisionState, action: Action): DecisionState {
       return {
         ...state,
         choices: [...state.choices].map((el, i) => {
+          console.log(action.value);
           let scoreToAdd;
           if (Array.isArray(action.value)) {
+            const copyOfActionValue = [...action.value];
             for (const score of action.value) {
-              const indexOfScore = action.value.indexOf(score);
+              //so that we always get the right index if we have duplicate values
+              const indexOfScore = copyOfActionValue.indexOf(score);
+              copyOfActionValue.splice(indexOfScore, 1, "removed");
+              console.log(indexOfScore);
               if (i === indexOfScore) {
+                console.log(indexOfScore, i, score);
                 scoreToAdd = score;
               }
             }
           }
-          console.log(scoreToAdd);
+          // console.log(scoreToAdd);
           return { ...el, score: scoreToAdd };
         }),
       };
@@ -161,12 +168,14 @@ export default function DecisionMaker() {
 
   function handleFindTheWinner() {
     const arrayOfScores = calculateScores(state.attributes, state.choices);
+    console.log(arrayOfScores);
     const largestScore = [...arrayOfScores].sort((a, b) => b - a)[0];
     const indexOfLargestScore = arrayOfScores.indexOf(largestScore);
     const winner = state.choices.filter(
       (el: ChoiceValuesElement, i: number) => i === indexOfLargestScore
     )[0].choiceName;
 
+    console.log(arrayOfScores);
     dispatch({ type: "insertScores", value: arrayOfScores });
     dispatch({ type: "insertWinner", value: winner });
   }
@@ -193,7 +202,7 @@ export default function DecisionMaker() {
           >
             <Choices choices={state.choices} dispatch={dispatch} Item={Item} />
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#f3e5f5" }}>
+              <Item sx={{ bgcolor: "#fce9ef" }}>
                 <form>
                   <fieldset>
                     <legend>attributes and relative importance:</legend>
@@ -249,7 +258,7 @@ export default function DecisionMaker() {
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#f3e5f5" }}>
+              <Item sx={{ bgcolor: "#fce9ef" }}>
                 <Box sx={{ display: "flex" }}>
                   {state.choices.map((el: ChoiceValuesElement, i: number) => (
                     <ChoiceCard
@@ -266,7 +275,7 @@ export default function DecisionMaker() {
               </Item>
             </Grid>
             <Grid item xs={12}>
-              <Item sx={{ bgcolor: "#f3e5f5" }}>
+              <Item sx={{ bgcolor: "#fce9ef" }}>
                 <p>Winner: {state.winner}</p>
               </Item>
             </Grid>
